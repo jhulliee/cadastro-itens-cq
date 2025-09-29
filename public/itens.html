@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home</title>
+    <style>
+      h1{
+        color: rgb(255, 148, 228);
+      }
+    </style>
+  </head>
+  <body>
+    <h1>★Visão Geral★</h1>
+    <h3>Listagem de pessoas</h3>
+
+    <div id="status">Carregando...</div>
+    <div id="lista"></div>
+
+    <div>
+      <button onclick="mostrarFormulario()">➕ Adicionar Pessoa</button>
+    </div>
+
+    <form >
+      <label>Login:</label>
+      <input type="text" id="login" name="login" required />
+
+      <label>Senha:</label>
+      <input type="password" id="senha" name="senha" required />
+
+      <button type="submit">Entrar</button>
+    </form>
+
+    </form>
+    <script>
+      async function carregarPessoas() {
+        const response = await fetch("/pessoas");
+
+       
+        const elemento = 
+        cument.getElementById("status");
+        if (!response.ok)
+        
+          elemento.textCo
+          ent = "Não foi possível carregar as pessoas.";
+        }
+        elemento.textCont
+        t = "Pessoas carregadas com sucesso!";
+
+        const pessoas = await response.json();
+        console.log("\nResponsesss: ", response, "\n pessoas", pessoas);
+
+        const container = document.getElementById("lista");
+        if (pessoas.length === 0) {
+          container.textContent = "Nenhuma pessoa cadastrada.";
+          return;
+        }
+    
+        const ul = document.createElement("ul");
+
+        for (let i = 0; i < pessoas.length; i++) {
+          const li = document.createElement("li");
+          li.textContent = `${p.nome} — ${p.idade} anos — ${p.cidade} — hobby: ${p.hobby}`;
+          ul.appendChild(li);
+        }
+
+      carregarPessoas();
+    </script>
+  </body>
+</html>
