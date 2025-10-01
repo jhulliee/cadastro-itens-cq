@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Home</title>
     <style>
-      h1{
+      h1 {
         color: rgb(255, 148, 228);
       }
     </style>
@@ -21,7 +21,7 @@
       <button onclick="mostrarFormulario()">➕ Adicionar Pessoa</button>
     </div>
 
-    <form >
+    <form id="formulario" style="display: none;">
       <label>Login:</label>
       <input type="text" id="login" name="login" required />
 
@@ -31,40 +31,99 @@
       <button type="submit">Entrar</button>
     </form>
 
-    </form>
     <script>
       async function carregarPessoas() {
         const response = await fetch("/pessoas");
+        const elemento = document.getElementById("status");
 
-       
-        const elemento = 
-        cument.getElementById("status");
-        if (!response.ok)
-        
-          elemento.textCo
-          ent = "Não foi possível carregar as pessoas.";
+        if (!response.ok) {
+          elemento.textContent = "Não foi possível carregar as pessoas.";
+          return;
         }
-        elemento.textCont
-        t = "Pessoas carregadas com sucesso!";
+        elemento.textContent = "Pessoas carregadas com sucesso!";
 
         const pessoas = await response.json();
-        console.log("\nResponsesss: ", response, "\n pessoas", pessoas);
+        console.log("\nResposta: ", response, "\nPessoas: ", pessoas);
 
         const container = document.getElementById("lista");
         if (pessoas.length === 0) {
           container.textContent = "Nenhuma pessoa cadastrada.";
           return;
         }
-    
+
         const ul = document.createElement("ul");
 
         for (let i = 0; i < pessoas.length; i++) {
+          const p = pessoas[i];
+          const texto = `NOME: ${p.nome}  --${p.login}`;
           const li = document.createElement("li");
-          li.textContent = `${p.nome} — ${p.idade} anos — ${p.cidade} — hobby: ${p.hobby}`;
+           
+          const span = document.createElement("span")
+          span.textContent = texto;
+          
+          const botoa = document.createElement("button");
+          botoa.textContent = "x"
+          botoa.style.marginLeft = "10px";
+          botoa.onclick = () => deletarPessoa(pessoa.id);
+
+          li.appendChild(span);
+          li.appendChild(botoa);
           ul.appendChild(li);
+        
+          
         }
 
+        container.innerHTML = ''; // limpa conteúdo anterior
+        container.appendChild(ul);
+      }
+
+      function mostrarFormulario() {
+        const formulario = document.getElementById("formulario");
+        if (formulario.style.display === "none") {
+          btoa.inertext = "ocutar formulario";
+          formulario.style.display = "block";
+        } else{
+          btoa.innertext = "adicionar pessoas";
+          formulario.style.display = "nome"
+        }
+        formulario.style.display = "block";
+      }
+
+      // Chama a função ao carregar a página
       carregarPessoas();
+      function adicionarpessoas(){
+        event.preventDefault()
+
+        const nome = document.getElementById("nome").value.trim()
+        const login = document.getElementById("login").value.trim()
+        const senha = document.getElementById("senha").value
+
+        if(!nome || !login || !senha) {
+          alert("preencha todos os campos!");         
+        }
+        const container = document.getElementById("lista");
+        let ul = container.querySelector("ul");
+        if (!ul){
+          ul = document.createElement("ul");
+          container.appendChild(ul);
+        }
+
+        const li = document.createElement("li");  
+        li.textContent = `NOME: ${nome} --${login}`;
+        ul.appendChild(li);
+
+        document.getElementById("formulario").reset();
+        mostrarFormulario();
+      }
+
+      async function deletarPessoa(id) {
+        console.log("QUERO APAGAR A PESSOA COM ID = ", id)
+      
+        const response = await fetch(`/pessoa/${id}`, {
+         method: "DELETE",
+        });
+      }
     </script>
   </body>
 </html>
+    

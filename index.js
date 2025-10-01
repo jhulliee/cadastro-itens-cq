@@ -126,6 +126,18 @@ app.post('/pessoas', (req, res) => {
     res.status(201).json('pessoa criada!');
 })
 
+app.delete('/pessoa/:id',(req, res) => {
+    const idParaRemover = parseInt(req.params.id); // Obter o ID da URL
+
+    const indice = pessoas.findIndex(pessoa => pessoa.id === idParaRemover);
+
+    if (indice !== -1) {
+        pessoas.splice(indice, 1);
+        res.status(204).send(); // Resposta de sucesso sem conteúdo
+    } else {
+        res.status(404).send({ mensagem: "Pessoa não encontrada" }); // Pessoa com ID não existe
+    }
+})
 
 app.listen(PORT, () => {
     console.log(`Servidor rodando em http://localhost:${PORT}`);
